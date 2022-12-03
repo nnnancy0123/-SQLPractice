@@ -1,0 +1,43 @@
+--64問題：全てのゴール時間と得点を上げたプレイヤー名を表示してください。オウンゴールは表示しないでください。ただし、結合は使わずに副問合せを用いてください。
+	--副問合せ（SELECT句）
+	select 
+	g.id, g.goal_time ,	--XXX,（select 逗号很重要
+	(select p.name from players p where p.id = g.player_id)as player_name 
+	from 
+	goals g 
+	where 
+	g.player_id is not null
+	
+--65問題：全てのゴール時間と得点を上げたプレイヤー名を表示してください。オウンゴールは表示しないでください。ただし、副問合せは使わずに、結合を用いてください。
+	--結合と副問合せ（SELECT句）
+	select 
+	g.id, g.goal_time, p.name from goals g join players p on p.id = g.player_id
+	
+--66問題：各ポジションごと（GK、FWなど）に最も身長と、その選手名、所属クラブを表示してください。ただし、FROM句に副問合せを使用してください。
+select p1.position, p1.最大身長, p2.name, p2.club 
+from(select position,max(height)最大身長 from players group by position )p1
+LEFT JOIN players p2 ON p1.最大身長 = p2.height AND p1.position = p2.position
+
+--67問題：各ポジションごと（GK、FWなど）に最も身長と、その選手名を表示してください。ただし、SELECT句に副問合せを使用してください(副問合せ（SELECT句）)
+select p1.position, MAX(p1.height)as 最大身長,(select p2.name from players p2 where p2.position = p1.position and max(p1.height)= p2.height)as player_name from players p1 group by p1.position
+	--子查询里的条件要等于另一个表的条件
+--68問題：全選手の平均身長より低い選手をすべて抽出してください。表示する列は、背番号、ポジション、名前、身長としてください。(副問合せ（WHERE句）)
+select uniform_num, position, name, height from players where height < (select avg(height) from players)
+
+--復習37 IN 選手のポジションがGK、DF、MFに該当する選手をすべて抽出してください。ただし、IN句を用いてください。
+	select * from players p where p.position in('GK', 'DF', 'MF')
+	
+--69問題：各グループの最上位と最下位を表示し、その差が50より大きいグループを抽出してください。HAVING
+select group_name, max(ranking), min(ranking) from countries group by group_name having max(ranking)-min(ranking) >50
+	--GROUP BY 语句用于结合聚合函数，根据一个或多个列对结果集进行分组。
+	
+--70問題：1980年生まれと、1981年生まれの選手が何人いるか調べてください。ただし、日付関数は使用せず、UNION句を使用してください。
+select count(id) from players
+
+select '1980'as 誕生年, count(id) --'1980'?
+from players 
+WHERE birth BETWEEN '1980-1-1' AND '1980-12-31'
+union
+select '1981'as 誕生年, count(id) 
+from players 
+WHERE birth BETWEEN '1981-1-1' AND '1981-12-31'
