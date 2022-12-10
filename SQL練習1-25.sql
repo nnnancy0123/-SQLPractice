@@ -52,4 +52,14 @@ group by
 order by avg(p.height) DESC
 
 --3問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
+ 
+ select
+ (select c.name from countries c where c.id = p.country_id)as 国名 
+ ,avg(p.height) as 平均身長
+from 
+  players p
+  group by
+  p.country_id
+order by avg(p.height) DESC
+
 
