@@ -100,3 +100,21 @@ order by
  ゴール数 desc
  
 --7問題：すべての選手を対象として選手ごとの得点ランキングを表示してください。（テーブル結合を使うこと）
+select
+  p.name as 名前
+  , p.position as ポジション
+  , p.club as 所属クラブ
+  , count(g.id) as ゴール数 
+from
+  players p 
+  left join goals g 
+    on g.player_id = p.id 
+group by
+  p.id
+  , p.name
+  , p.position
+  , p.club 
+order by
+  ゴール数 desc
+
+--8問題：各ポジションごとの総得点を表示してください。
