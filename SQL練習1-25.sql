@@ -8,8 +8,10 @@ from
 group by
   group_name 
 order by
-  group_name ASC                                  --意外と勘違いしやすいポイントとして、MIN()関数を使った方がランキング最上位、MAX()関数を使った方がランキング最下位となりますので注意
-  --2問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
+  group_name ASC                                 
+ --意外と勘違いしやすいポイントとして、MIN()関数を使った方がランキング最上位、MAX()関数を使った方がランキング最下位となりますので注意
+ 
+ --2問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
   select
   c.name as 国名
   , avg(p.height) as 平均身長 
@@ -20,7 +22,9 @@ from
 group by
   c.name 
 order by
-  avg(p.height) desc                              --70問題：1980年生まれと、1981年生まれの選手が何人いるか調べてください。ただし、日付関数は使用せず、UNION句を使用してください。
+  avg(p.height) desc                              
+
+--70問題：1980年生まれと、1981年生まれの選手が何人いるか調べてください。ただし、日付関数は使用せず、UNION句を使用してください。
   select
   '1980' as 誕生年
   , count(id) 
@@ -35,7 +39,8 @@ select
 from
   players 
 WHERE
-  birth BETWEEN '1981-1-1' AND '1981-12-31'       --回答：‘描述'，是死的。用以描述BETWEEN '1981-1-1' AND '1981-12-31'?个方位的?
+  birth BETWEEN '1981-1-1' AND '1981-12-31'       
+--回答：‘描述'，是死的。用以描述BETWEEN '1981-1-1' AND '1981-12-31'?个方位的?
   
 --3問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はcountriesテーブルとしてください。
   
@@ -51,7 +56,7 @@ group by
   ,c.id
 order by avg(p.height) DESC
 
---3問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
+--4問題：各国の平均身長を高い方から順に表示してください。ただし、FROM句はplayersテーブルとして、テーブル結合を使わず副問合せを用いてください。
  
  select
  (select c.name from countries c where c.id = p.country_id)as 国名 
@@ -62,4 +67,36 @@ from
   p.country_id
 order by avg(p.height) DESC
 
-
+--5問題：キックオフ日時と対戦国の国名をキックオフ日時の早いものから順に表示してください。
+select
+  p.kickoff as キックオフ日時
+  , c2.name as 国名
+  , c1.name as 敵国 
+from
+  pairings p 
+  left join countries c1 
+    on c1.id = p.my_country_id 
+  left join countries c2 
+    on c2.id = p.enemy_country_id 
+order by
+  kickoff
+  
+--6問題：すべての選手を対象として選手ごとの得点ランキングを表示してください。（SELECT句で副問合せを使うこと）
+select
+  p.name as 名前
+  , p.position as ポジション
+  , p.club as 所属クラブ
+  , ( 
+    select
+      count(id) 
+    from
+      goals g 
+    where
+      g.player_id = p.id
+  ) as ゴール数 
+from
+  players p 
+order by
+ ゴール数 desc
+ 
+--7問題：すべての選手を対象として選手ごとの得点ランキングを表示してください。（テーブル結合を使うこと）
