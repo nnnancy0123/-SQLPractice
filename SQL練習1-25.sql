@@ -141,3 +141,5 @@ from
 order by
   age desc
 
+--10問題：オウンゴールの回数を表示する
+--（オウンゴールはgoalsテーブルのplayer_id列がNULLのものになります）
