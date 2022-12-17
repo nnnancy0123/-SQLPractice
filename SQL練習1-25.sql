@@ -131,3 +131,13 @@ order by
  ゴール数 desc
  
 --9問題：ワールドカップ開催当時（2014-06-13）の年齢をプレイヤー毎に表示する。
+select
+  p.birth
+  , age('2014-06-13', p.birth) as age
+  , p.name
+  , p.position 
+from
+  players p 
+order by
+  age desc
+
