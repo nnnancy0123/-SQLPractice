@@ -118,3 +118,16 @@ order by
   ゴール数 desc
 
 --8問題：各ポジションごとの総得点を表示してください。
+select
+  p.position as ポジション
+  , count(g.id) as ゴール数 
+from
+  players p 
+  left join goals g 
+    on g.player_id = p.id 
+group by
+ p.position
+order by
+ ゴール数 desc
+ 
+--9問題：ワールドカップ開催当時（2014-06-13）の年齢をプレイヤー毎に表示する。
